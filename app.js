@@ -27,7 +27,7 @@ const URI = process.env.MONGO_URI
 app.set('trust proxy', 1);
 app.use(limiter({
   windowMs: 60 * 1000, // 1 minutes
-  max: 60, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  max: 60, // Limit each IP to 60 requests per `window` (here, per 1 minutes)
 }));
 
 app.use(express.json());
