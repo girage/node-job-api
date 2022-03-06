@@ -14,11 +14,11 @@ const getJob = async (req, res) => {
   const job = await Job.findOne({
     _id: jobId,
     created_by: userId,
-  })
+  });
 
   if (!job) {
-    throw new NotFound(`No job with id ${jobId}`)
-  }
+    throw new NotFound(`No job with id ${jobId}`);
+  };
 
   res.status(StatusCodes.OK).json({ job });
 }
@@ -33,12 +33,12 @@ const updateJob = async (req, res) => {
   const {
     body: { company, position },
     user: { userId },
-    params: { id: jobId }
+    params: { id: jobId },
   } = req;
 
   if (company === '' || position === '') {
     throw new BadRequestError('Company or Position fields cannot be epmty');
-  }
+  };
 
   const job = await Job.findByIdAndUpdate(
     { _id: jobId, created_by: userId },
@@ -47,15 +47,26 @@ const updateJob = async (req, res) => {
   );
 
   if (!job) {
-    throw new NotFoundError(`No job with id ${jobId}`)
-  }
+    throw new NotFoundError(`No job with id ${jobId}`);
+  };
 
-  res.status(StatusCodes.OK).json({job});
+  res.status(StatusCodes.OK).json({ job });
 
 }
 
 const deleteJob = async (req, res) => {
-  res.send('delete job');
+  const {
+    user: { userId },
+    params: { id: jobId },
+  } = req;
+
+  const job = await Job.findOneAndRemove({ _id: jobId, created_by: userId });
+
+  if (!job) {
+    throw new NotFoundError(`No job with id ${jobId}`);
+  };
+
+  res.status(StatusCodes.OK).send(`Remove the job id: ${jobId} Done...`);
 }
 
 
