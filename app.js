@@ -5,10 +5,7 @@ const express = require('express');
 const app = express();
 
 const connectDB = require('./db/connect');
-
-const PORT = process.env.PORT || 3500;
-const URI = process.env.MONGO_URI
-
+const AuthenticateUser = require('./middleware/authentication');
 
 const authRouter = require('./routes/auth');
 const jobsRouter = require('./routes/jobs');
@@ -17,12 +14,14 @@ const jobsRouter = require('./routes/jobs');
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHanddlerMiddleware = require('./middleware/error-handler');
 
-app.use(express.json());
+const PORT = process.env.PORT || 3500;
+const URI = process.env.MONGO_URI
 
+app.use(express.json());
 
 // routes
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/jobs', jobsRouter);
+app.use('/api/v1/jobs', AuthenticateUser, jobsRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHanddlerMiddleware);
