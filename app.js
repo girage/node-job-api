@@ -1,8 +1,10 @@
+require('dotenv').config();
+require('express-async-errors');
+
 const express = require('express');
 const app = express();
-require('dotenv').config();
+
 const connectDB = require('./db/connect');
-const Router = require('./routes/auth');
 
 const PORT = process.env.PORT || 3500;
 const URI = process.env.MONGO_URI
